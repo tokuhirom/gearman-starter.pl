@@ -8,6 +8,7 @@ use UNIVERSAL::require;
 use Class::Inspector;
 use Parallel::Scoreboard;
 use IO::Socket::INET;
+use Filesys::Notify::Simple;
 
 my $max_workers            = 10;
 my $max_requests_per_child = 100;
@@ -21,9 +22,57 @@ GetOptions(
     'listen=s'                 => \$listen,
     'port=i'                   => \my $port,
     'h|help'                   => \my $help,
+    'R|Reload=s@'              => \my $reload,
 ) or pod2usage();
 pod2usage() unless $servers && @$servers;
 pod2usage() if $help;
+
+if ( $reload && @$reload ) {
+
+    RELOAD: while ( 1 ) {
+
+        my $pid = fork;
+        die "fork failed: $!" unless defined $pid;
+
+        if ( $pid ) {
+            #main process
+            my $watcher = Filesys::Notify::Simple->new([@$reload,$0]);
+            warn "Watching @$reload for file updates.\n";
+
+            NOTIFY: while ( 1 ) {
+                my @restart;
+
+                # this is blocking
+                $watcher->wait(sub {
+                    my @events = @_;
+                    @events = grep {
+                        $_->{path} !~ m![/\\][\._]|\.bak$|~$!
+                    } @events;
+                    return unless @events;
+                    @restart = @events;
+                });
+
+                next NOTIFY unless @restart;
+            
+                for my $ev (@restart) {
+                    warn "-- $ev->{path} updated.\n";
+                }
+
+                warn "Killing the existing worker (pid:$pid)\n";
+                kill 'TERM', $pid;
+                waitpid( $pid, 0 );
+                warn "Successfully killed! Restarting the new worker process.\n";
+                last NOTIFY;
+            }
+        }
+        else {
+            # child process
+            last RELOAD;
+        }
+    }
+    
+}
+
 
 my $worker = Gearman::Worker->new();
 $worker->job_servers(@$servers);

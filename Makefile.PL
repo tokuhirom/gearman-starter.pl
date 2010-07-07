@@ -11,6 +11,7 @@ requires 'Parallel::Prefork';
 requires 'UNIVERSAL::require';
 requires 'Class::Inspector';
 requires 'Parallel::Scoreboard';
+requires 'Filesys::Notify::Simple';
 
 install_script 'gearman-starter.pl';
 
