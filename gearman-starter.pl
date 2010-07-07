@@ -60,7 +60,7 @@ if ( $port ) {
 
     my $sock = IO::Socket::INET->new(
         Listen => 5,
-        LocalAddress => $listen,
+        LocalAddr => $listen,
         LocalPort => $port,
         Proto  => 'tcp',
         Reuse  => 1,
