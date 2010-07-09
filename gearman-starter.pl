@@ -73,6 +73,7 @@ if ( $reload && @$reload ) {
     
 }
 
+my $start_time = time();
 
 my $worker = Gearman::Worker->new();
 $worker->job_servers(@$servers);
@@ -129,9 +130,14 @@ if ( $port ) {
         $SIG{TERM} = sub { exit(0) };
         while ( 1 ) {
             my $client = $sock->accept();
+            my $system_info = 'gearman_servers: ' . join ",", @$servers;
+            $system_info .= ' prefix: ' . $prefix if $prefix;
+            $system_info .= ' class: ' . join ",", @ARGV;
+            my $uptime = time - $start_time;
+
             if ( $scoreboard ) {
-                my $raw_stats = '';
                 my $stats = $scoreboard->read_all();
+                my $raw_stats;
                 my $busy = 0;
                 my $idle = 0;
                 for my $pid ( sort { $a <=> $b } keys %$stats) {
@@ -144,6 +150,8 @@ if ( $port ) {
                     $raw_stats .= sprintf "%-14d %s\n", $pid, $stats->{$pid}
                 }
                 $raw_stats = <<EOF;
+System: $system_info
+Uptime: $uptime
 BusyWorkers: $busy
 IdleWorkers: $idle
 --
@@ -153,7 +161,11 @@ EOF
                 print $client $raw_stats;
             }
             else {
-                print $client "ERROR: scoreboard is disabled\n";
+                print $client <<EOF;
+System: $system_info
+Uptime: $uptime
+ERROR: scoreboard is disabled
+EOF
             }
             $client->close;
         }
