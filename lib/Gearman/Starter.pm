@@ -119,6 +119,10 @@ sub _run {
     while ( $pm->signal_received ne 'TERM' ) {
         $pm->start and next;
 
+        $0 = "$0 (worker)";
+        my $counter = 0;
+        local $SIG{TERM} = sub { $counter = $self->max_requests_per_child };
+
         # Gearman::Worker isn't fork-safe
         my $worker = Gearman::Worker->new;
         $worker->job_servers($self->servers);
@@ -128,9 +132,6 @@ sub _run {
             $worker->register_function($job_name, $jobs{$job_name});
         }
 
-        $0 = "$0 (worker)";
-        my $counter = 0;
-        local $SIG{TERM} = sub { $counter = $self->max_requests_per_child };
         if ( $self->scoreboard ) {
             $self->scoreboard->update('. 0');
         }
@@ -235,7 +236,7 @@ EOF
                 print $client $output;
             }
             else {
-                print $client 'ERROR: scoreboard is disabled';
+                print $client "ERROR: scoreboard is disabled\n";
             }
             $client->close;
         }
