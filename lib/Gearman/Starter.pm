@@ -5,6 +5,8 @@ use warnings;
 
 our $VERSION = "0.01";
 
+use Gearman::Starter::Util;
+
 use Getopt::Long;
 use Pod::Usage qw/pod2usage/;
 
@@ -224,38 +226,16 @@ sub _launch_monitor_socket {
             $system_info .= ' prefix: ' . $self->prefix if $self->prefix;
             $system_info .= ' class: ' . join ",", $self->modules;
             my $uptime = time - $self->start_time;
-
-            if ( $self->scoreboard ) {
-                my $stats = $self->scoreboard->read_all;
-                my $raw_stats;
-                my $busy = 0;
-                my $idle = 0;
-                for my $pid ( sort { $a <=> $b } keys %$stats) {
-                    if ( $stats->{$pid} =~ m!^A! ) {
-                        $busy++;
-                    }
-                    else {
-                        $idle++;
-                    }
-                    $raw_stats .= sprintf "%-14d %s\n", $pid, $stats->{$pid}
-                }
-                $raw_stats = <<EOF;
+            print $client <<"EOF";
 System: $system_info
 Uptime: $uptime
-BusyWorkers: $busy
-IdleWorkers: $idle
---
-pid       Status Counter Comment
-$raw_stats
 EOF
-                print $client $raw_stats;
+            if ( $self->scoreboard ) {
+                my $output = Gearman::Starter::Util::display_scoreboard($self->scoreboard);
+                print $client $output;
             }
             else {
-                print $client <<EOF;
-System: $system_info
-Uptime: $uptime
-ERROR: scoreboard is disabled
-EOF
+                print $client 'ERROR: scoreboard is disabled';
             }
             $client->close;
         }
