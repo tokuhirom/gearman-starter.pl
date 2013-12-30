@@ -1,0 +1,78 @@
+{
+   "abstract" : "It's new $module",
+   "author" : [
+      "Songmu <y.songmu@gmail.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.132510",
+   "license" : [
+      "bsd"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Gearman-Starter",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "xt",
+         "inc",
+         "share",
+         "eg",
+         "examples",
+         "author",
+         "builder"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "CPAN::Meta" : "0",
+            "CPAN::Meta::Prereqs" : "0",
+            "Module::Build" : "0.38"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::CPAN::Meta" : "0",
+            "Test::MinimumVersion" : "0.10108",
+            "Test::Pod" : "1.41",
+            "Test::Spellunker" : "v0.2.7"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Class::Inspector" : "0",
+            "Filesys::Notify::Simple" : "0",
+            "Gearman::Worker" : "0",
+            "Parallel::Prefork" : "0",
+            "Parallel::Scoreboard" : "0",
+            "UNIVERSAL::require" : "0",
+            "perl" : "5.008005"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0.98"
+         }
+      }
+   },
+   "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/Songmu/gearman-starter.pl/issues"
+      },
+      "homepage" : "https://github.com/Songmu/gearman-starter.pl",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/Songmu/gearman-starter.pl.git",
+         "web" : "https://github.com/Songmu/gearman-starter.pl"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "tokuhirom <tokuhirom@gmail.com>",
+      "Masahiro Nagano <kazeburo@gmail.com>"
+   ]
+}
