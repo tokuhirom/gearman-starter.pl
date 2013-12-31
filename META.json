@@ -58,7 +58,11 @@
       },
       "test" : {
          "requires" : {
-            "Test::More" : "0.98"
+            "File::Which" : "0",
+            "Gearman::Client" : "0",
+            "Net::EmptyPort" : "0",
+            "Test::More" : "0.98",
+            "Test::TCP" : "0"
          }
       }
    },

@@ -1,13 +1,15 @@
 use strict;
 use warnings;
 use Test::More;
+use Test::TCP;
 
 use File::Spec;
+use File::Which qw/which/;
 use Gearman::Client;
 use Gearman::Starter;
 use Storable qw/nfreeze/;
 
-use Test::TCP;
+plan skip_all => "No gearmand command" unless which('gearmand');
 
 my $gearmand = Test::TCP->new(
     code => sub {

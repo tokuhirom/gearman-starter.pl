@@ -2,17 +2,20 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
+use Test::TCP;
 
 use File::Spec;
 use File::Temp qw/tempdir/;
+use File::Which qw/which/;
+
 use Gearman::Client;
 use Gearman::Starter;
 use Storable qw/nfreeze/;
 use Parallel::Scoreboard;
 
-use Test::TCP;
 use Net::EmptyPort qw/empty_port/;
-use Net::Telnet;
+
+plan skip_all => "No gearmand command" unless which('gearmand');
 
 my $gearmand = Test::TCP->new(
     code => sub {
@@ -65,11 +68,16 @@ else {
     is scalar(@keys), 3;
     like $_, qr/^[0-9]+$/ for @keys;
     like $_, qr/^(\. 0|_ 1)$/ for map {$stat->{$_}} @keys;
-    my $output = `telnet localhost @{[$gearman_starter->port]} 2>&1`;
-    like $output, qr/\Q$display_output\E/;
-    like $output, qr/BusyWorkers: 0/;
-    like $output, qr/IdleWorkers: 3/;
-    like $output, qr/Uptime: [0-9]+/;
+
+    SKIP: {
+        plan skip "No telnet command", 4 unless which('telnet');
+
+        my $output = `telnet localhost @{[$gearman_starter->port]} 2>&1`;
+        like $output, qr/\Q$display_output\E/;
+        like $output, qr/BusyWorkers: 0/;
+        like $output, qr/IdleWorkers: 3/;
+        like $output, qr/Uptime: [0-9]+/;
+    };
 
     my $TERMSIG = $^O eq 'MSWin32' ? 'KILL' : 'TERM';
     kill $TERMSIG, $pid;

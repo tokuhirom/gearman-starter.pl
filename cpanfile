@@ -17,5 +17,9 @@ on configure => sub {
 };
 
 on test => sub {
+    requires 'File::Which';
+    requires 'Gearman::Client';
+    requires 'Net::EmptyPort';
     requires 'Test::More', '0.98';
+    requires 'Test::TCP';
 };
