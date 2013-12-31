@@ -32,7 +32,7 @@ sub reload {
 
 sub servers {
     my $self = shift;
-    @{ ref $self->{server} ? $self->{server} : [$self->{servers} || ()] };
+    @{ ref $self->{server} ? $self->{server} : [$self->{server} || ()] };
 }
 
 sub modules {
@@ -100,7 +100,13 @@ sub run {
         my $pid = $self->_launch_monitor_socket;
         push @{$self->pid}, $pid;
     }
+    $self->jobs($self->_load_jobs);
 
+    $self->_run;
+}
+
+sub _load_jobs {
+    my $self = shift;
     my %jobs;
     for my $klass ($self->modules) {
         Module::Load::load($klass);
@@ -110,9 +116,7 @@ sub run {
             $jobs{$job_name} = $klass->can($job);
         }
     }
-    $self->jobs(\%jobs);
-
-    $self->_run;
+    \%jobs;
 }
 
 sub _run {
