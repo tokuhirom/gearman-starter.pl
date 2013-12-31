@@ -49,9 +49,9 @@ sub new_with_options {
         config => [qw/default posix_default no_ignore_case auto_help pass_through/]
     );
     my %opt = (
-        'max-workers'             => 10,
+        'max-workers'            => 10,
         'max-requests-per-child' => 100,
-        'listen'                  => '0.0.0.0',
+        'listen'                 => '0.0.0.0',
     );
     $p->getoptionsfromarray(\@argv, \%opt, qw/
         server|s=s@
