@@ -42,7 +42,7 @@ sub modules {
 
 sub pid {shift->{pid} ||= []}
 
-sub new_with_options {
+sub parse_options {
     my ($class, @argv) = @_;
 
     my $p = Getopt::Long::Parser->new(
@@ -65,10 +65,20 @@ sub new_with_options {
     /) or pod2usage;
     pod2usage unless $opt{server} && @{$opt{server}};
 
-    $opt{module} = \@argv;
+    while (@argv) {
+        my $mod = shift @argv;
+        last if $mod eq '--';
+        push @{ $opt{module} }, $mod;
+    }
     hash_rename %opt, code => sub {tr/-/_/};
 
-    $class->new(%opt);
+    (\%opt, \@argv);
+}
+
+sub new_with_options {
+    my ($class, @argv) = @_;
+    my ($opt,) = $class->parse_options(@argv);
+    $class->new($opt);
 }
 
 sub run {
