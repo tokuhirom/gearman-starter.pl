@@ -10,17 +10,18 @@ use Gearman::Starter::Util;
 use Getopt::Long;
 use Pod::Usage qw/pod2usage/;
 
-use Gearman::Worker;
-use Parallel::Prefork;
 use Class::Inspector;
-use Parallel::Scoreboard;
-use IO::Socket::INET;
 use Filesys::Notify::Simple;
+use Gearman::Worker;
+use Hash::Rename qw/hash_rename/;
 use Module::Load ();
+use IO::Socket::INET;
+use Parallel::Prefork;
+use Parallel::Scoreboard;
 
 use Class::Accessor::Lite (
     new => 1,
-    ro => [qw/prefix port listen/],
+    ro => [qw/prefix port listen max_workers max_requests_per_child scoreboard_dir/],
     rw => [qw/start_time scoreboard/],
 );
 
@@ -29,13 +30,17 @@ sub reload {
     @{$self->{Reload} || []};
 }
 
-sub servers                {@{shift->{server}}                 }
-sub max_workers            { shift->{'max-workers'}            }
-sub max_requests_per_child { shift->{'max-requests-per-child'} }
-sub scoreboard_dir         { shift->{'scoreboard-dir'}         }
-sub modules                {@{shift->{modules}}                }
+sub servers {
+    my $self = shift;
+    @{ ref $self->{server} ? $self->{server} : [$self->{servers} || ()] };
+}
 
-sub pid                    {shift->{pid} ||= []}
+sub modules {
+    my $self = shift;
+    @{ ref $self->{module} ? $self->{module} : [$self->{module} || ()] };
+}
+
+sub pid {shift->{pid} ||= []}
 
 sub new_with_options {
     my ($class, @argv) = @_;
@@ -60,7 +65,8 @@ sub new_with_options {
     /) or pod2usage;
     pod2usage unless $opt{server} && @{$opt{server}};
 
-    $opt{modules} = \@argv;
+    $opt{module} = \@argv;
+    hash_rename %opt, code => sub {tr/-/_/};
 
     $class->new(%opt);
 }
@@ -84,6 +90,7 @@ sub run {
         my $pid = $self->_launch_monitor_socket;
         push @{$self->pid}, $pid;
     }
+    $self->_jobs; # load jobs on ahead
 
     $self->_run;
 }
