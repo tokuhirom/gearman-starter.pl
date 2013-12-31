@@ -22,7 +22,7 @@ use Parallel::Scoreboard;
 use Class::Accessor::Lite (
     new => 1,
     ro => [qw/prefix port listen max_workers max_requests_per_child scoreboard_dir/],
-    rw => [qw/start_time scoreboard/],
+    rw => [qw/start_time scoreboard jobs/],
 );
 
 sub reload {
@@ -90,25 +90,19 @@ sub run {
         my $pid = $self->_launch_monitor_socket;
         push @{$self->pid}, $pid;
     }
-    $self->_jobs; # load jobs on ahead
+
+    my %jobs;
+    for my $klass ($self->modules) {
+        Module::Load::load($klass);
+        my @jobs = grep /^job_/, @{Class::Inspector->functions($klass)};
+        for my $job (@jobs) {
+            (my $job_name = $job) =~ s/^job_//; # Sledgeish dispatching
+            $jobs{$job_name} = $klass->can($job);
+        }
+    }
+    $self->jobs(\%jobs);
 
     $self->_run;
-}
-
-sub _jobs {
-    my $self = shift;
-    $self->{_jobs} ||= do {
-        my %jobs;
-        for my $klass ($self->modules) {
-            Module::Load::load($klass);
-            my @jobs = grep /^job_/, @{Class::Inspector->functions($klass)};
-            for my $job (@jobs) {
-                (my $job_name = $job) =~ s/^job_//; # Sledgeish dispatching
-                $jobs{$job_name} = $klass->can($job);
-            }
-        }
-        \%jobs;
-    }
 }
 
 sub _run {
@@ -134,7 +128,7 @@ sub _run {
         my $worker = Gearman::Worker->new;
         $worker->job_servers($self->servers);
         $worker->prefix($self->prefix) if $self->prefix;
-        my %jobs = %{$self->_jobs};
+        my %jobs = %{$self->jobs};
         for my $job_name (keys %jobs) {
             $worker->register_function($job_name, $jobs{$job_name});
         }
