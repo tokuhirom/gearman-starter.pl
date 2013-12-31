@@ -136,7 +136,7 @@ sub _run {
 
         $0 = "$0 (worker)";
         my $counter = 0;
-        local $SIG{TERM} = sub { $counter = $self->max_requests_per_child };
+        $SIG{TERM} = sub { $counter = $self->max_requests_per_child };
 
         # Gearman::Worker isn't fork-safe
         my $worker = Gearman::Worker->new;

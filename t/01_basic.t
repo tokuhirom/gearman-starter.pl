@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use utf8;
 use Test::More;
 
 use File::Spec;
@@ -21,8 +20,8 @@ my $gearmand = Test::TCP->new(
 my $server_str = '127.0.0.1:'.$gearmand->port;
 my $gearman_starter = Gearman::Starter->new(
     server                 => $server_str,
-    max_workers            => 1,
-    max_requests_per_child => 1,
+    max_workers            => 3,
+    max_requests_per_child => 10,
     module                 => 't::lib::Job',
 );
 isa_ok $gearman_starter, 'Gearman::Starter';
