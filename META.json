@@ -43,13 +43,17 @@
       },
       "runtime" : {
          "requires" : {
+            "Class::Accessor::Lite" : "0",
             "Class::Inspector" : "0",
             "Filesys::Notify::Simple" : "0",
             "Gearman::Worker" : "0",
+            "Getopt::Long" : "0",
+            "Hash::Rename" : "0",
+            "Module::Load" : "0",
             "Parallel::Prefork" : "0",
             "Parallel::Scoreboard" : "0",
-            "UNIVERSAL::require" : "0",
-            "perl" : "5.008005"
+            "Pod::Usage" : "0",
+            "perl" : "5.008001"
          }
       },
       "test" : {
