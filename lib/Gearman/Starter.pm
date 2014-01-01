@@ -275,10 +275,10 @@ Gearman::Starter - Gearman workers launcher with register functions
         server                 => ['127.0.0.1:7003'],
         max_workers            => 3,
         max_requests_per_child => 10,
-        scoreboard_dir         => $scoreboard_dir,  # optional
-        port                   => 9999,             # optional
         module                 => ['MyWorker::Job'],
-        Reload                 => ['lib/MyWorker/Job.pm'],
+        scoreboard_dir         => $scoreboard_dir,         # optional
+        port                   => 9999,                    # optional
+        Reload                 => ['lib/MyWorker/Job.pm'], # optional
     );
     $gearman_starter->run;
 
@@ -303,6 +303,13 @@ gearman server
 =item C<max_workders>
 
 =item C<max_requests_per_child>
+
+=item C<module>
+
+Modules with job definitions.
+
+The functions whose name start with C<^/job_/> in the modules are dealt with Gearman functions
+and registered to workers automatically.
 
 =item C<scoreboard_dir>
 
