@@ -266,15 +266,54 @@ __END__
 
 =head1 NAME
 
-Gearman::Starter - It's new $module
+Gearman::Starter - Gearman workers launcher with register functions
 
 =head1 SYNOPSIS
 
     use Gearman::Starter;
+    my $gearman_starter = Gearman::Starter->new(
+        server                 => ['127.0.0.1:7003'],
+        max_workers            => 3,
+        max_requests_per_child => 10,
+        scoreboard_dir         => $scoreboard_dir,  # optional
+        port                   => 9999,             # optional
+        module                 => ['MyWorker::Job'],
+        Reload                 => ['lib/MyWorker/Job.pm'],
+    );
+    $gearman_starter->run;
 
 =head1 DESCRIPTION
 
-Gearman::Starter is ...
+Gearman::Starter is gearman worker launcher with register functions from specified modules.
+
+This module is Objective backend of L<gearman-starter.pl>.
+
+=head1 CONSTRUCTOR
+
+C<new> is constructor method.
+
+The following options are available:
+
+=over
+
+=item C<server>
+
+gearman server
+
+=item C<max_workders>
+
+=item C<max_requests_per_child>
+
+=item C<scoreboard_dir>
+
+If you want to monitor status of workers, scoreboard is available.
+
+=item C<port>
+
+You can monitor status of workers through specified tcp port.
+It is easily available by using telnet or netcat, etc.
+
+=back
 
 =head1 LICENSE
 
@@ -283,7 +322,11 @@ Copyright (C) Songmu.
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
-=head1 AUTHOR
+=head1 AUTHORS
+
+Tokuhiro Matsuno E<lt> tokuhirom@gmail.com E<gt>
+
+Masahiro Nagano E<lt>kazeburo@gmail.comE<gt>
 
 Songmu E<lt>y.songmu@gmail.comE<gt>
 

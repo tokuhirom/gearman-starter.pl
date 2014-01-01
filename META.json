@@ -1,7 +1,7 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Gearman workers launcher with register functions",
    "author" : [
-      "Songmu <y.songmu@gmail.com>"
+      "Tokuhiro Matsuno < tokuhirom@gmail.com >"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.132510",
@@ -81,6 +81,7 @@
    "version" : "0.01",
    "x_contributors" : [
       "tokuhirom <tokuhirom@gmail.com>",
-      "Masahiro Nagano <kazeburo@gmail.com>"
+      "Masahiro Nagano <kazeburo@gmail.com>",
+      "Songmu <y.songmu@gmail.com>"
    ]
 }
