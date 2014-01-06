@@ -59,7 +59,7 @@ it under the same terms as Perl itself.
 
 # AUTHORS
 
-Tokuhiro Matsuno < tokuhirom@gmail.com >
+Tokuhiro Matsuno <tokuhirom@gmail.com>
 
 Masahiro Nagano <kazeburo@gmail.com>
 

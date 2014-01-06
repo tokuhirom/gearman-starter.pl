@@ -331,7 +331,7 @@ it under the same terms as Perl itself.
 
 =head1 AUTHORS
 
-Tokuhiro Matsuno E<lt> tokuhirom@gmail.com E<gt>
+Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
 
 Masahiro Nagano E<lt>kazeburo@gmail.comE<gt>
 

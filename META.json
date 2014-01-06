@@ -1,12 +1,12 @@
 {
    "abstract" : "Gearman workers launcher with register functions",
    "author" : [
-      "Tokuhiro Matsuno < tokuhirom@gmail.com >"
+      "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.132510",
    "license" : [
-      "bsd"
+      "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -69,18 +69,17 @@
    "release_status" : "unstable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/Songmu/gearman-starter.pl/issues"
+         "web" : "https://github.com/tokuhirom/gearman-starter.pl/issues"
       },
-      "homepage" : "https://github.com/Songmu/gearman-starter.pl",
+      "homepage" : "https://github.com/tokuhirom/gearman-starter.pl",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/Songmu/gearman-starter.pl.git",
-         "web" : "https://github.com/Songmu/gearman-starter.pl"
+         "url" : "git://github.com/tokuhirom/gearman-starter.pl.git",
+         "web" : "https://github.com/tokuhirom/gearman-starter.pl"
       }
    },
    "version" : "0.01",
    "x_contributors" : [
-      "tokuhirom <tokuhirom@gmail.com>",
       "Masahiro Nagano <kazeburo@gmail.com>",
       "Songmu <y.songmu@gmail.com>"
    ]
