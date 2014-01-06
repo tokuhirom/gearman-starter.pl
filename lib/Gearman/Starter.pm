@@ -284,7 +284,7 @@ Gearman::Starter - Gearman workers launcher with register functions
 
 =head1 DESCRIPTION
 
-Gearman::Starter is gearman worker launcher with register functions from specified modules.
+Gearman::Starter is Gearman worker launcher with register functions from specified modules.
 
 This module is Objective backend of L<gearman-starter.pl>.
 
@@ -298,7 +298,7 @@ The following options are available:
 
 =item C<server>
 
-gearman server
+Gearman server
 
 =item C<max_workders>
 
@@ -308,7 +308,7 @@ gearman server
 
 Modules with job definitions.
 
-The functions whose name start with C<^/job_/> in the modules are dealt with Gearman functions
+The functions whose name start with C</^job_/> in the modules are dealt with Gearman functions
 and registered to workers automatically.
 
 =item C<scoreboard_dir>
@@ -317,8 +317,8 @@ If you want to monitor status of workers, scoreboard is available.
 
 =item C<port>
 
-You can monitor status of workers through specified tcp port.
-It is easily available by using telnet or netcat, etc.
+You can monitor status of workers through specified TCP port.
+It is easily available by using Telnet or Netcat, etc.
 
 =back
 
