@@ -13,6 +13,7 @@ Gearman::Starter - Gearman workers launcher with register functions
         scoreboard_dir         => $scoreboard_dir,         # optional
         port                   => 9999,                    # optional
         Reload                 => ['lib/MyWorker/Job.pm'], # optional
+        on_fail                => sub { ... },             # optional
     );
     $gearman_starter->run;
 

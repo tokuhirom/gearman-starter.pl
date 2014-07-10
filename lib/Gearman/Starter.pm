@@ -3,7 +3,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 use Gearman::Starter::Util;
 
@@ -280,6 +280,7 @@ Gearman::Starter - Gearman workers launcher with register functions
         scoreboard_dir         => $scoreboard_dir,         # optional
         port                   => 9999,                    # optional
         Reload                 => ['lib/MyWorker/Job.pm'], # optional
+        on_fail                => sub { ... },             # optional
     );
     $gearman_starter->run;
 
