@@ -21,7 +21,7 @@ use Parallel::Scoreboard;
 
 use Class::Accessor::Lite (
     new => 1,
-    ro => [qw/prefix port listen max_workers max_requests_per_child scoreboard_dir/],
+    ro => [qw/prefix port listen max_workers max_requests_per_child scoreboard_dir on_fail/],
     rw => [qw/start_time scoreboard jobs/],
 );
 
@@ -159,6 +159,7 @@ sub _run {
             on_complete => sub {
                 $self->scoreboard && $self->scoreboard->update( sprintf "%s %s", '_', $counter );
             },
+            ($self->on_fail ? (on_fail => $self->on_fail) : ()),
             stop_if => sub {
                 $counter >= $self->max_requests_per_child;
             }
